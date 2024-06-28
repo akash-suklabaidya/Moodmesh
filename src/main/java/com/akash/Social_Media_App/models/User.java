@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -20,6 +23,9 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    private List<Integer> followers=new ArrayList<>();
+    private List<Integer> followings=new ArrayList<>();
+    private String gender;
 
     public User() {
 

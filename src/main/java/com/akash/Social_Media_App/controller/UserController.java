@@ -2,16 +2,12 @@ package com.akash.Social_Media_App.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.akash.Social_Media_App.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 // import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.akash.Social_Media_App.models.User;
 import com.akash.Social_Media_App.repository.UserRepository;
@@ -23,17 +19,13 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
 
-        User newUser = new User();
-        newUser.setEmail(user.getEmail());
-        newUser.setFirstName(user.getFirstName());
-        newUser.setLastName(user.getLastName());
-        newUser.setPassword(user.getPassword());
-        newUser.setId(user.getId());
-
-        User savedUser = userRepository.save(newUser);
+        User savedUser=userService.registerUser(user);
 
         return savedUser;
     }
@@ -47,36 +39,46 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public User getUserById(@PathVariable("userId") Integer id) {
+    public User getUserById(@PathVariable Integer userId) throws Exception {
 
-        User user1 = new User(1, "code", "zosh", "Akash@gmail.com", "45678");
-
-        user1.setId(id);
-
-        return user1;
+        User user=userService.findUserByd(userId);
+        return user;
 
     }
 
-    @PutMapping("/users")
-    public User updateUser(@RequestBody User user) {
-        User user1 = new User(1, "code", "zosh", "Akash@gmail.com", "Akash@1234");
-
-        if (user.getFirstName() != null) {
-            user1.setFirstName(user.getFirstName());
-        }
-        if (user.getLastName() != null) {
-            user1.setLastName(user.getLastName());
-        }
-        if (user.getEmail() != null) {
-            user1.setEmail(user.getEmail());
-        }
-
-        return user1;
+    @PutMapping("/users/{userId}")
+    public User updateUser(@RequestBody User user, @PathVariable Integer userId)throws Exception {
+        
+        User updatedUser=userService.updateUser(user,userId);
+        return updatedUser;
     }
 
     @DeleteMapping("/users/{userId}")
-    public String deleteUser(@PathVariable Integer userId) {
-        return "User Deleted Successfully with Id " + userId;
+    public String deleteUser(@PathVariable Integer userId) throws Exception {
+
+        Optional<User> user=userRepository.findById(userId);
+        if(user.isEmpty()){
+            throw new Exception("User not exit with id "+userId);
+        }
+
+        userRepository.delete(user.get());
+
+        return "User deleted successfully with id+ "+userId;
+
     }
+    @PutMapping("/users/follow/{userId1}/{userId2}")
+    public User followUserHandler(@PathVariable Integer userId1,@PathVariable Integer userId2)throws Exception{
+
+        User user=userService.followUser(userId1,userId2);
+        return user;
+
+    }
+    @GetMapping("/users/search")
+    public List<User> searchUser(@RequestParam("query")String query){
+        List<User> users=userService.searchUser(query);
+        return users;
+    }
+
+
 
 }
