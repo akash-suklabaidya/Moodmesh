@@ -1,8 +1,6 @@
 package com.akash.Social_Media_App.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +16,7 @@ import java.util.List;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String firstName;
     private String lastName;
@@ -25,6 +24,7 @@ public class User {
     private String password;
     private List<Integer> followers=new ArrayList<>();
     private List<Integer> followings=new ArrayList<>();
+    private List<Post> savedPost=new ArrayList<>();
     private String gender;
 
     public User() {

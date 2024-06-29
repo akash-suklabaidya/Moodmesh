@@ -1,6 +1,5 @@
 package com.akash.Social_Media_App.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +40,7 @@ public class UserController {
     @GetMapping("/users/{userId}")
     public User getUserById(@PathVariable Integer userId) throws Exception {
 
-        User user=userService.findUserByd(userId);
+        User user=userService.findUserById(userId);
         return user;
 
     }

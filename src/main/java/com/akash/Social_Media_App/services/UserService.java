@@ -8,7 +8,7 @@ public interface UserService {
 
     public User registerUser(User user);
 
-    public User findUserByd(Integer userId) throws Exception;
+    public User findUserById(Integer userId) throws Exception;
 
     public User findUserByEmail(String email);
 
