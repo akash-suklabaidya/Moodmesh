@@ -7,7 +7,9 @@ import com.akash.Social_Media_App.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -28,29 +30,53 @@ public class PostServiceImplementation implements PostService{
         Post newPost=new Post();
         newPost.setCaption(post.getCaption());
         newPost.setImage(post.getImage());
-//        newPost.setCreatedAt();
+        newPost.setCreatedAt(LocalDateTime.now());
         newPost.setVideo(post.getVideo());
         newPost.setUser(user);
-
+        postRepository.save(newPost);
         return newPost;
     }
 
     @Override
-    public String deletePost(Integer postId, Integer userId)throws Exception {
-        Post post=findPostById(postId);
-        User user=userService.findUserById(userId);
+    public String deletePost(Integer postId, Integer userId) throws Exception {
+        Post post = findPostById(postId);
+        User user = userService.findUserById(userId);
 
-        //You can only delete your post
-        if(post.getUser().getId()!=user.getId()){
-            throw new Exception("you can't delete another users post");
+        // You can only delete your post
+        if (!Objects.equals(post.getUser().getId(), user.getId())) {
+            throw new Exception("You can't delete another user's post");
         }
-        postRepository.deleteById(postId);
-        return "post deleted successfully";
+
+        // Remove the post from all users' saved posts
+        List<User> users = userRepository.findAll(); // Assuming there's a method to get all users
+        for (User u : users) {
+            if (u.getSavedPost().contains(post)) {
+                u.getSavedPost().remove(post);
+                userRepository.save(u); // Save the user after removal
+            }
+        }
+
+        // Now delete the post
+        postRepository.delete(post);
+        return "Post deleted successfully";
     }
+//    public String deletePost(Integer postId, Integer userId)throws Exception {
+//        Post post=findPostById(postId);
+//        User user=userService.findUserById(userId);
+//
+//        //You can only delete your post
+//        if(!Objects.equals(post.getUser().getId(), user.getId())){
+//            throw new Exception("you can't delete another users post");
+//        }
+//        postRepository.delete(post);
+//        return "post deleted successfully";
+//    }
 
     @Override
     public List<Post> findPostByUserId(Integer userId) {
-        return findPostByUserId(userId);
+
+        return postRepository.findPostByUserId(userId);
+
     }
 
     @Override

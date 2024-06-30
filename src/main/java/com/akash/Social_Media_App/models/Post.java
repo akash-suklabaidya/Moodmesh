@@ -1,9 +1,6 @@
 package com.akash.Social_Media_App.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +21,13 @@ public class Post {
     private String caption;
     private String image;
     private String video;
+
+    //One user multiple post
+    @ManyToOne
     private User user;
+
+    //One post can be liked by many user
+    @OneToMany
     private List<User> liked=new ArrayList<>();
     private LocalDateTime createdAt;
 

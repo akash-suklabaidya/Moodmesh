@@ -1,5 +1,6 @@
 package com.akash.Social_Media_App.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,9 @@ public class User {
     private String password;
     private List<Integer> followers=new ArrayList<>();
     private List<Integer> followings=new ArrayList<>();
+
+    @JsonIgnore
+    @ManyToMany
     private List<Post> savedPost=new ArrayList<>();
     private String gender;
 
