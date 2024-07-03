@@ -1,5 +1,6 @@
 package com.akash.Social_Media_App.services;
 
+import com.akash.Social_Media_App.config.JwtProvider;
 import com.akash.Social_Media_App.models.User;
 import com.akash.Social_Media_App.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class UserServiceImplementation implements UserService{
         newUser.setLastName(user.getLastName());
         newUser.setPassword(user.getPassword());
         newUser.setId(user.getId());
+        newUser.setGender(user.getGender());
 
         User savedUser = userRepository.save(newUser);
 
@@ -46,18 +48,17 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public User followUser(Integer userId1, Integer userId2) throws Exception {
-        User user1= findUserById(userId1);
+    public User followUser(Integer reqUserId, Integer userId2) throws Exception {
+        User reqUser= findUserById(reqUserId);
         User user2= findUserById(userId2);
         // user1 following user2
-        user2.getFollowers().add(user1.getId());
-        user1.getFollowings().add(user2.getId());
+        user2.getFollowers().add(reqUser.getId());
+        reqUser.getFollowings().add(user2.getId());
 
-        userRepository.save(user1);
+        userRepository.save(reqUser);
         userRepository.save(user2);
 
-        return user1;
-
+        return reqUser;
     }
 
     @Override
@@ -77,6 +78,9 @@ public class UserServiceImplementation implements UserService{
         if(user.getEmail()!=null){
             oldUser.setEmail(user.getEmail());
         }
+        if(user.getGender()!=null){
+            oldUser.setGender(user.getGender());
+        }
         User updatedUSer=userRepository.save(oldUser);
 
         return updatedUSer;
@@ -85,5 +89,12 @@ public class UserServiceImplementation implements UserService{
     @Override
     public List<User> searchUser(String query) {
         return userRepository.searchUser(query);
+    }
+
+    @Override
+    public User findUserByJwt(String jwt) {
+        String email= JwtProvider.getEmailFromJwtToken(jwt);
+        User user=userRepository.findByEmail(email);
+        return user;
     }
 }

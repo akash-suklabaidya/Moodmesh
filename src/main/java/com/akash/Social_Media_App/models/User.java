@@ -25,11 +25,11 @@ public class User {
     private String password;
     private List<Integer> followers=new ArrayList<>();
     private List<Integer> followings=new ArrayList<>();
-
+    private String gender;
     @JsonIgnore
     @ManyToMany
     private List<Post> savedPost=new ArrayList<>();
-    private String gender;
+
 
     public User() {
 
