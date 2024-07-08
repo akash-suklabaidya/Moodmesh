@@ -3,6 +3,7 @@ package com.akash.Social_Media_App.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.akash.Social_Media_App.exceptions.UserException;
 import com.akash.Social_Media_App.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{userId}")
-    public User getUserById(@PathVariable Integer userId) throws Exception {
+    public User getUserById(@PathVariable Integer userId) throws UserException {
 
         User user=userService.findUserById(userId);
         return user;
@@ -66,7 +67,7 @@ public class UserController {
 
     }
     @PutMapping("users/follow/{userId2}")
-    public User followUserHandler(@RequestHeader("Authorization")String jwt,@PathVariable Integer userId2)throws Exception{
+    public User followUserHandler(@RequestHeader("Authorization")String jwt,@PathVariable Integer userId2)throws UserException{
 
         User reqUser=userService.findUserByJwt(jwt);
         User user=userService.followUser(reqUser.getId(), userId2);
