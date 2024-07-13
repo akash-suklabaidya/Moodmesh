@@ -38,14 +38,14 @@ class IntroPage extends StatelessWidget {
                   height: 200 * textScaleFactor,
                   fit: BoxFit.cover,
                 ),
-                const SizedBox(height: 230),
+                const SizedBox(height: 240),
                 Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
                         text: "Your Premier ",
                         style: TextStyle(
-                          fontSize: 30 * textScaleFactor,
+                          fontSize: 25 * textScaleFactor,
                           fontWeight: FontWeight.bold,
                           color: kblack,
                         ),
@@ -53,7 +53,7 @@ class IntroPage extends StatelessWidget {
                       TextSpan(
                         text: "Social Connection App",
                         style: TextStyle(
-                          fontSize: 30 * textScaleFactor,
+                          fontSize: 25 * textScaleFactor,
                           fontWeight: FontWeight.w600,
                           color: kPrimary,
                         ),
@@ -62,17 +62,17 @@ class IntroPage extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 30 * textScaleFactor),
+                SizedBox(height: 40 * textScaleFactor),
                 Text(
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: kblacklight,
                     fontWeight: FontWeight.w600,
-                    fontSize: 15 * textScaleFactor,
+                    fontSize: 14 * textScaleFactor,
                   ),
                 ),
-                SizedBox(height: 30 * textScaleFactor),
+                SizedBox(height: 40 * textScaleFactor),
                 SizedBox(
                   width: double.infinity,
                   height: 50 * textScaleFactor,
@@ -100,7 +100,7 @@ class IntroPage extends StatelessWidget {
                     text: "Already have an account? ",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 15 * textScaleFactor,
+                      fontSize: 14 * textScaleFactor,
                     ),
                     children: [
                       TextSpan(
@@ -108,7 +108,7 @@ class IntroPage extends StatelessWidget {
                         style: TextStyle(
                           color: kPrimary,
                           decoration: TextDecoration.underline,
-                          fontSize: 15 * textScaleFactor,
+                          fontSize: 14 * textScaleFactor,
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {

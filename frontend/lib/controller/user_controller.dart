@@ -3,19 +3,30 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class UserController {
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
 
   void dispose() {
-    nameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    genderController.dispose();
   }
 
-  String? validateName(String? value) {
+  String? validateFirstName(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your name';
+      return 'Please enter your first name';
+    }
+    return null;
+  }
+
+  String? validateLastName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your last name';
     }
     return null;
   }
@@ -40,23 +51,33 @@ class UserController {
     return null;
   }
 
-  Future<void> signup() async {
-    final url = Uri.parse('http://your-backend-url/signup'); // Replace with your actual URL
+  String? validateGender(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your gender';
+    }
+    return null;
+  }
+
+  Future<String> signup() async {
+    final url = Uri.parse('http://192.168.1.4:8080/auth/signup');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
-      'name': nameController.text,
+      'firstName': firstNameController.text,
+      'lastName': lastNameController.text,
       'email': emailController.text,
       'password': passwordController.text,
+      'gender': genderController.text,
     });
 
     final response = await http.post(url, headers: headers, body: body);
 
     if (response.statusCode == 200) {
-      // Handle successful response
-      print('Signup successful');
+      return 'Signup successful';
+    } else if (response.statusCode == 400) {
+      return 'Email already registered. Please try again';
     } else {
-      // Handle error response
-      print('Signup failed');
+      final responseBody = jsonDecode(response.body);
+      return responseBody['message'] ?? 'Signup failed';
     }
   }
 }
