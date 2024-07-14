@@ -2,7 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class UserController {
+import 'package:shared_preferences/shared_preferences.dart';
+
+class LoginResult {
+  final int statusCode;
+  final String message;
+
+  LoginResult(this.statusCode, this.message);
+
+  @override
+  String toString() {
+    return 'LoginResult(statusCode: $statusCode, message: $message)';
+  }
+}
+
+class SignupController {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -58,8 +72,8 @@ class UserController {
     return null;
   }
 
-  Future<String> signup() async {
-    final url = Uri.parse('http://192.168.1.4:8080/auth/signup');
+  Future<LoginResult> signup() async {
+    final url = Uri.parse('http://192.168.1.3:8080/auth/signup');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       'firstName': firstNameController.text,
@@ -69,15 +83,38 @@ class UserController {
       'gender': genderController.text,
     });
 
-    final response = await http.post(url, headers: headers, body: body);
+    try {
+      final response = await http.post(url, headers: headers, body: body);
 
-    if (response.statusCode == 200) {
-      return 'Signup successful';
-    } else if (response.statusCode == 400) {
-      return 'Email already registered. Please try again';
-    } else {
-      final responseBody = jsonDecode(response.body);
-      return responseBody['message'] ?? 'Signup failed';
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final token = responseData['token'];
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('authToken', token);
+        // return responseData['message'] ?? 'Signup successful';
+        return LoginResult(response.statusCode, 'Signup successful');
+      } else if (response.statusCode == 400) {
+        return LoginResult(
+            response.statusCode, 'Email already registered. Please try again');
+      } else {
+        // Handle error response
+        final errorData = jsonDecode(response.body);
+        return errorData['message'] ?? 'Signup failed';
+      }
+    } catch (e) {
+      print('Error: $e');
+      return LoginResult(174, 'An error occurred. Please try again.');
     }
+  }
+
+  Future<String?> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
+  }
+
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('authToken');
   }
 }
