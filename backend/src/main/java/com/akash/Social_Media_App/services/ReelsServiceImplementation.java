@@ -33,7 +33,7 @@ public class ReelsServiceImplementation implements ReelsService{
     }
 
     @Override
-    public List<Reels> findUsersReels(Integer userId) throws Exception {
+    public List<Reels> findUsersReels(String userId) throws Exception {
 
         return reelsRepository.findByUserId(userId);
     }

@@ -29,7 +29,7 @@ public class StoryServiceImplementation implements StoryService{
     }
 
     @Override
-    public List<Story> findStoryByUserId(Integer userId) throws Exception {
+    public List<Story> findStoryByUserId(String userId) throws Exception {
         User user=userService.findUserById(userId);
         return storyRepository.findByUserId(userId);
     }

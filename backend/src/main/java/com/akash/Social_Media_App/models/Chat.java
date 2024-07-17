@@ -1,30 +1,37 @@
 package com.akash.Social_Media_App.models;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.boot.jaxb.mapping.LifecycleCallback;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 @Data
 @AllArgsConstructor
-@Entity
+@NoArgsConstructor
+@Document(collection = "chats") // Specify the MongoDB collection name
 public class Chat {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-    private String chat_name;
-    @ManyToMany
-    private List<User> users=new ArrayList<>();
+    private String id; // Use String for id in MongoDB, or ObjectId if using BSON ObjectIds
+
+    private String chatName;
+
+    // List of users participating in the chat
+    @DBRef
+    private List<User> users = new ArrayList<>();
+
     private LocalDateTime timeStamp;
 
-    @OneToMany(mappedBy = "chat")
-    private List<Message> messages=new ArrayList<>();
-    public Chat(){}
+    // List of messages in the chat
+    @JsonIgnore
+    @DBRef
+    private List<Message> messages = new ArrayList<>();
 
 }

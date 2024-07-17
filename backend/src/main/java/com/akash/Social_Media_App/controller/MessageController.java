@@ -18,7 +18,7 @@ public class MessageController {
     private UserService userService;
 
     @PostMapping("/api/messages/chat/{chatId}")
-    public Message createMessage(@RequestBody Message req, @RequestHeader("Authorization")String jwt,@PathVariable Integer chatId) throws Exception {
+    public Message createMessage(@RequestBody Message req, @RequestHeader("Authorization")String jwt,@PathVariable String chatId) throws Exception {
 
         User reqUser=userService.findUserByJwt(jwt);
 
@@ -29,7 +29,7 @@ public class MessageController {
     }
 
     @GetMapping("/api/messages/chat/{chatId}")
-    public List<Message> findChatMessage(@PathVariable Integer chatId) throws Exception {
+    public List<Message> findChatMessage(@PathVariable String chatId) throws Exception {
 
 //        User reqUser=userService.findUserByJwt(jwt);
 

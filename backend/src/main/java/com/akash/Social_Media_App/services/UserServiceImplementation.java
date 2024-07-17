@@ -32,7 +32,7 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public User findUserById(Integer userId) throws UserException {
+    public User findUserById(String userId) throws UserException {
         Optional<User> user = userRepository.findById(userId);
 
         if (user.isPresent()) {
@@ -49,9 +49,12 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public User followUser(Integer reqUserId, Integer userId2) throws UserException {
+    public User followUser(String reqUserId, String userId2) throws UserException {
         User reqUser= findUserById(reqUserId);
         User user2= findUserById(userId2);
+        if(reqUser.getFollowings().contains(userId2)){
+            return null;
+        }
         // user1 following user2
         user2.getFollowers().add(reqUser.getId());
         reqUser.getFollowings().add(user2.getId());
@@ -63,7 +66,7 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public User updateUser(User user,Integer userId) throws UserException {
+    public User updateUser(User user,String userId) throws UserException {
         Optional<User> user1=userRepository.findById(userId);
         if(user1.isEmpty()){
             throw new UserException("user not found with id "+ userId);
@@ -82,6 +85,7 @@ public class UserServiceImplementation implements UserService{
         if(user.getGender()!=null){
             oldUser.setGender(user.getGender());
         }
+
         User updatedUSer=userRepository.save(oldUser);
 
         return updatedUSer;

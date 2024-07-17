@@ -23,7 +23,7 @@ public class PostServiceImplementation implements PostService{
     @Autowired
     UserRepository userRepository;
     @Override
-    public Post createNewPost(Post post, Integer userId) throws Exception {
+    public Post createNewPost(Post post, String userId) throws Exception {
 
         User user=userService.findUserById(userId);
 
@@ -38,7 +38,7 @@ public class PostServiceImplementation implements PostService{
     }
 
     @Override
-    public String deletePost(Integer postId, Integer userId) throws Exception {
+    public String deletePost(String postId, String userId) throws Exception {
         Post post = findPostById(postId);
         User user = userService.findUserById(userId);
 
@@ -50,8 +50,8 @@ public class PostServiceImplementation implements PostService{
         // Remove the post from all users' saved posts
         List<User> users = userRepository.findAll(); // Assuming there's a method to get all users
         for (User u : users) {
-            if (u.getSavedPost().contains(post)) {
-                u.getSavedPost().remove(post);
+            if (u.getSavedPosts().contains(post)) {
+                u.getSavedPosts().remove(post);
                 userRepository.save(u); // Save the user after removal
             }
         }
@@ -60,7 +60,7 @@ public class PostServiceImplementation implements PostService{
         postRepository.delete(post);
         return "Post deleted successfully";
     }
-//    public String deletePost(Integer postId, Integer userId)throws Exception {
+//    public String deletePost(String postId, String userId)throws Exception {
 //        Post post=findPostById(postId);
 //        User user=userService.findUserById(userId);
 //
@@ -73,14 +73,14 @@ public class PostServiceImplementation implements PostService{
 //    }
 
     @Override
-    public List<Post> findPostByUserId(Integer userId) {
+    public List<Post> findPostByUserId(String userId) {
 
         return postRepository.findPostByUserId(userId);
 
     }
 
     @Override
-    public Post findPostById(Integer postId)throws Exception {
+    public Post findPostById(String postId)throws Exception {
         Optional<Post> post=postRepository.findById(postId);
         if(post.isEmpty()){
             throw new Exception("post not found with id "+postId);
@@ -94,22 +94,23 @@ public class PostServiceImplementation implements PostService{
     }
 
     @Override
-    public Post savedPost(Integer postId, Integer userId)throws Exception {
+    public Post savedPost(String postId, String userId)throws Exception {
         Post post=findPostById(postId);
         User user=userService.findUserById(userId);
 
-        if(user.getSavedPost().contains(post)){
-            user.getSavedPost().remove(post);
+        if(user.getSavedPosts().contains(post)){
+            user.getSavedPosts().remove(post);
         }
+
         else{
-            user.getSavedPost().add(post);
+            user.getSavedPosts().add(post);
         }
         userRepository.save(user);
         return post;
     }
 
     @Override
-    public Post likePost(Integer postId, Integer userId) throws Exception{
+    public Post likePost(String postId, String userId) throws Exception{
         Post post=findPostById(postId);
         User user=userService.findUserById(userId);
         if(post.getLiked().contains(user)){
@@ -121,4 +122,16 @@ public class PostServiceImplementation implements PostService{
 
         return postRepository.save(post);
     }
+
+    @Override
+    public List<Post> findUsersSavedPost(String userId) throws Exception {
+        User user=userService.findUserById(userId);
+        if(user!=null){
+            return user.getSavedPosts();
+        }
+        return null;
+
+    }
+
+
 }

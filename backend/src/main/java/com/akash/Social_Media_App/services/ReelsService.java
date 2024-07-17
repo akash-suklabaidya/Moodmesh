@@ -8,7 +8,7 @@ import java.util.List;
 public interface ReelsService {
     public Reels createReels(Reels reel, User user);
     public List<Reels> findAllReels();
-    public List<Reels> findUsersReels(Integer userId) throws Exception;
+    public List<Reels> findUsersReels(String userId) throws Exception;
 
 
 

@@ -6,18 +6,21 @@ import java.util.List;
 
 public interface PostService {
 
-        Post createNewPost(Post post,Integer userId) throws Exception;
+        Post createNewPost(Post post,String userId) throws Exception;
 
-        String deletePost(Integer postId,Integer userId) throws Exception;
+        String deletePost(String postId,String userId) throws Exception;
 
-        List<Post> findPostByUserId(Integer userId);
+        List<Post> findPostByUserId(String userId);
 
-        Post findPostById(Integer postId) throws Exception;
+        Post findPostById(String postId) throws Exception;
 
         List<Post> findAllPost();
 
-        Post savedPost(Integer postId,Integer userId) throws Exception;
+        Post savedPost(String postId,String userId) throws Exception;
 
-        Post likePost(Integer postId,Integer userId) throws Exception;
+        Post likePost(String postId,String userId) throws Exception;
+
+        List<Post> findUsersSavedPost(String userId) throws Exception;
+
 
 }

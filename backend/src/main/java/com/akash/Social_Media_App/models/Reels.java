@@ -1,25 +1,28 @@
 package com.akash.Social_Media_App.models;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-@Setter
-@Getter
-@AllArgsConstructor
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@Document(collection = "reels") // Specify the MongoDB collection name
 public class Reels {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private String id; // Use String for id in MongoDB, or ObjectId if using BSON ObjectIds
+
     private String title;
     private String video;
 
-    @ManyToOne
+    @DBRef // Reference to the User document
     private User user;
 
-    public Reels(){}
-
+    // Default constructor (needed for MongoDB)
+    public Reels() {
+    }
 }

@@ -18,7 +18,7 @@ public class ChatServiceImplementation implements ChatService{
 
     @Override
     public Chat createChat(User reqUser, User user2) {
-        Chat isExist=chatRepository.findChatByUsersId(user2,reqUser);
+        Chat isExist=chatRepository.findChatByUsersId(user2.getId(),reqUser.getId());
         if(isExist!=null){
             return isExist;
         }
@@ -30,7 +30,7 @@ public class ChatServiceImplementation implements ChatService{
     }
 
     @Override
-    public Chat findChatById(Integer chatId) throws Exception {
+    public Chat findChatById(String chatId) throws Exception {
 
         Optional<Chat> chat=chatRepository.findById(chatId);
         if(chat.isEmpty()){
@@ -42,7 +42,7 @@ public class ChatServiceImplementation implements ChatService{
     }
 
     @Override
-    public List<Chat> findUsersChat(Integer userId) {
+    public List<Chat> findUsersChat(String userId) {
         return chatRepository.findByUsersId(userId);
     }
 }

@@ -8,6 +8,6 @@ public class CreateChatRequest {
 
 //    private User reqUser;
 //    private User user2;
-        private Integer userId;
+        private String userId;
 
 }

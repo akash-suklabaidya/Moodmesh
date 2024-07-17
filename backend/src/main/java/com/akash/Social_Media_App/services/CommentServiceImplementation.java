@@ -23,7 +23,7 @@ public class CommentServiceImplementation implements CommentService{
     private PostRepository postRepository;
 
     @Override
-    public Comment createComment(Comment comment, Integer postId, Integer userId) throws Exception {
+    public Comment createComment(Comment comment, String postId, String userId) throws Exception {
         User user=userService.findUserById(userId);
         Post post=postService.findPostById(postId);
 
@@ -40,7 +40,7 @@ public class CommentServiceImplementation implements CommentService{
     }
 
     @Override
-    public Comment findCommentById(Integer commentId) throws Exception {
+    public Comment findCommentById(String commentId) throws Exception {
         Optional<Comment> comment=commentRepository.findById(commentId);
         if(comment.isEmpty()){
             throw new Exception("Comment not exist");
@@ -49,7 +49,7 @@ public class CommentServiceImplementation implements CommentService{
     }
 
     @Override
-    public Comment likeComment(Integer commentId, Integer userId) throws Exception {
+    public Comment likeComment(String commentId, String userId) throws Exception {
         Comment comment=findCommentById(commentId);
         User user=userService.findUserById(userId);
         if(comment.getLiked().contains(user)){

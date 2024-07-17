@@ -2,18 +2,18 @@ package com.akash.Social_Media_App.repository;
 
 import com.akash.Social_Media_App.models.Chat;
 import com.akash.Social_Media_App.models.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ChatRepository extends JpaRepository<Chat,Integer> {
+public interface ChatRepository extends MongoRepository<Chat,String> {
 
-    public List<Chat> findByUsersId(Integer userId);
+    public List<Chat> findByUsersId(String userId);
 
-    @Query("select c from Chat c Where :user Member of c.users And :reqUser Member of c.users")
-    public Chat findChatByUsersId(@Param("user") User user,@Param("reqUser")User reqUser);
+    @Query("{ 'users': { $all: [?0, ?1] } }")
+    public Chat findChatByUsersId(String user, String reqUser);
 
 
 }

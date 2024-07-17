@@ -1,19 +1,18 @@
 package com.akash.Social_Media_App.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.akash.Social_Media_App.models.User;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 //class and uske unique identifier ka type
-public interface UserRepository extends JpaRepository <User,Integer>{
+public interface UserRepository extends MongoRepository<User,String> {
     
     public User findByEmail(String email);
 
-    @Query("select u from User u where u.firstName LIKE %:query% OR u.lastName LIKE %:query% OR u.email LIKE %:query%")
-    public List<User> searchUser(@Param("query") String query);
-
+    @Query("{ '$or' : [ { 'firstName' : { $regex: ?0, $options: 'i' } }, { 'lastName' : { $regex: ?0, $options: 'i' } }, { 'email' : { $regex: ?0, $options: 'i' } } ] }")
+    List<User> searchUser(String query);
 }

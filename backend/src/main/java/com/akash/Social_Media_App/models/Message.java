@@ -1,31 +1,34 @@
 package com.akash.Social_Media_App.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Document(collection = "messages") // Specify the MongoDB collection name
 public class Message {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private String id; // Use String for id in MongoDB, or ObjectId if using BSON ObjectIds
 
     private String content;
     private String image;
 
-    @ManyToOne
+    // Reference to the User document (Author of the message)
+    @DBRef
     private User user;
 
-    @JsonIgnore
-    @ManyToOne
+    // Reference to the Chat document
+    @DBRef
     private Chat chat;
 
     private LocalDateTime timestamp;
+
 }

@@ -1,14 +1,15 @@
 package com.akash.Social_Media_App.repository;
 
 import com.akash.Social_Media_App.models.Post;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-public interface PostRepository extends JpaRepository<Post,Integer> {
+public interface PostRepository extends MongoRepository<Post,String> {
 
-    @Query("select p from Post p where p.user.id=:userId")
-    List<Post> findPostByUserId(Integer userId);
+
+    @Query("{ 'user.id': ?0 }")
+    List<Post> findPostByUserId(String userId);
 
 }
