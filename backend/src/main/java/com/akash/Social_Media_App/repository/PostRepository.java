@@ -12,4 +12,7 @@ public interface PostRepository extends MongoRepository<Post,String> {
     @Query("{ 'user.id': ?0 }")
     List<Post> findPostByUserId(String userId);
 
+    @Query("{ 'user.$id': { $in: ?0 } }")
+    List<Post> findPostsByUserIds(List<String> userIds);
+
 }

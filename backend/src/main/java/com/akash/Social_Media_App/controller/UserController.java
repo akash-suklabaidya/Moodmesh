@@ -1,9 +1,12 @@
 package com.akash.Social_Media_App.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.akash.Social_Media_App.exceptions.UserException;
+import com.akash.Social_Media_App.models.Post;
+import com.akash.Social_Media_App.repository.PostRepository;
 import com.akash.Social_Media_App.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PostRepository postRepository;
 
     @Autowired
     UserService userService;
@@ -92,6 +98,28 @@ public class UserController {
             user.setPassword(null);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/feed")
+    public ResponseEntity<?> feedPost(@RequestHeader("Authorization") String jwt){
+        try {
+            User currentUser = userService.findUserByJwt(jwt);
+
+            List<String> followingIds = currentUser.getFollowings();
+            List<Post> feedPosts = new ArrayList<>();
+
+            for (String userId : followingIds) {
+                List<Post> posts = postRepository.findPostByUserId(userId);
+                feedPosts.addAll(posts);
+            }
+            feedPosts.addAll(postRepository.findPostByUserId(currentUser.getId()));
+
+
+            return new ResponseEntity<>(feedPosts,HttpStatus.OK);
+        }
+        catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

@@ -5,6 +5,7 @@ import com.akash.Social_Media_App.exceptions.UserException;
 import com.akash.Social_Media_App.models.User;
 import com.akash.Social_Media_App.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +17,16 @@ public class UserServiceImplementation implements UserService{
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Override
     public User registerUser(User user) {
         User newUser = new User();
         newUser.setEmail(user.getEmail());
         newUser.setFirstName(user.getFirstName());
         newUser.setLastName(user.getLastName());
-        newUser.setPassword(user.getPassword());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setId(user.getId());
         newUser.setGender(user.getGender());
 
@@ -84,6 +88,10 @@ public class UserServiceImplementation implements UserService{
         }
         if(user.getGender()!=null){
             oldUser.setGender(user.getGender());
+        }
+
+        if(user.getPassword()!=null){
+            oldUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
         User updatedUSer=userRepository.save(oldUser);
