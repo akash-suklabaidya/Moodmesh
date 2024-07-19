@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/controller/user_login_controller.dart';
-import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/pages/default_page.dart';
 import 'package:frontend/pages/signup_page.dart';
 import 'package:frontend/utils/constants.dart';
 import 'package:frontend/utils/loading.dart';
@@ -15,7 +15,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final LoginController _loginController = LoginController();
   bool _isLoading = false;
-  bool _isPasswordVisible = true;
+  bool _isPasswordVisible = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
         if (loginResult.statusCode == 200) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => DefaultPage()),
           );
         }
         ToastUtil.showToast(loginResult.message);

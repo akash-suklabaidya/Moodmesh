@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,7 +46,7 @@ class LoginController {
   }
 
   Future<LoginResult> login() async {
-    final url = Uri.parse('http://192.168.1.3:8080/auth/signin');
+    final url = Uri.parse('http://${IP}:${PORT}/auth/signin');
     final headers = {'Content-Type': 'application/json'};
 
     final body = jsonEncode({

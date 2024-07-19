@@ -17,3 +17,6 @@ const TextStyle kContentTextStyle = TextStyle(
   fontFamily: 'OpenSans',
   fontWeight: FontWeight.normal,
 );
+
+const IP = '192.168.1.3';
+const PORT = "8080";

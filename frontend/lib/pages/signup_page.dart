@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/controller/user_signup_controller.dart';
-import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/pages/default_page.dart';
 import 'package:frontend/pages/login_page.dart';
 import 'package:frontend/utils/constants.dart';
 import 'package:frontend/utils/loading.dart';
@@ -38,7 +38,7 @@ class _SignupPageState extends State<SignUp> {
         if (signupResult.statusCode == 200) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => DefaultPage()),
           );
         }
         ToastUtil.showToast(signupResult.message);
