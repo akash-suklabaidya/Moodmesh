@@ -8,7 +8,7 @@ VOLUME /temp
 COPY target/*.jar app.jar
 
 # Expose the port that your Spring Boot application will run on
-EXPOSE 8081
+EXPOSE 8080
 
 # Specify any environment variables if needed
 # ENV VARIABLE_NAME=value
