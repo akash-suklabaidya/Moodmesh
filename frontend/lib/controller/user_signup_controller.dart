@@ -73,7 +73,7 @@ class SignupController {
   }
 
   Future<LoginResult> signup() async {
-    final url = Uri.parse('http://192.168.1.3:8080/auth/signup');
+    final url = Uri.parse('https://moodmesh.onrender.com/auth/signup');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       'firstName': firstNameController.text,

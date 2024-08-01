@@ -46,7 +46,7 @@ class LoginController {
   }
 
   Future<LoginResult> login() async {
-    final url = Uri.parse('http://${IP}:${PORT}/auth/signin');
+    final url = Uri.parse('https://moodmesh.onrender.com/auth/signin');
     final headers = {'Content-Type': 'application/json'};
 
     final body = jsonEncode({
