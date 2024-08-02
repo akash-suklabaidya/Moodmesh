@@ -106,4 +106,12 @@ public class PostController {
         }
     }
 
+    @GetMapping("api/posts/{postId}/savedCount")
+    public long getSavedCount(@PathVariable String postId) throws Exception {
+
+        return postService.countUsersWhoSavedPost(postId);
+
+    }
+
+
 }

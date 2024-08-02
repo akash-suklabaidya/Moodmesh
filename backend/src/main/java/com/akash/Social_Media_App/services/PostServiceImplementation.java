@@ -133,5 +133,10 @@ public class PostServiceImplementation implements PostService{
 
     }
 
+    @Override
+    public long countUsersWhoSavedPost(String postId) {
+        return userRepository.countBySavedPostsContains(postId);
+    }
+
 
 }

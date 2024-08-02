@@ -1,6 +1,7 @@
 package com.akash.Social_Media_App.repository;
 
 
+import com.akash.Social_Media_App.models.Post;
 import com.akash.Social_Media_App.models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -15,4 +16,7 @@ public interface UserRepository extends MongoRepository<User,String> {
 
     @Query("{ '$or' : [ { 'firstName' : { $regex: ?0, $options: 'i' } }, { 'lastName' : { $regex: ?0, $options: 'i' } }, { 'email' : { $regex: ?0, $options: 'i' } } ] }")
     List<User> searchUser(String query);
+
+    long countBySavedPostsContains(String postId);
+
 }

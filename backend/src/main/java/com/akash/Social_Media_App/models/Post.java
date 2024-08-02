@@ -38,6 +38,7 @@ public class Post {
     @DBRef
     private List<Comment> comments = new ArrayList<>();
 
+
     // Default constructor (needed for MongoDB)
     public Post() {
     }
