@@ -73,6 +73,9 @@ flutter:
     - lib/assets/icons/message.svg
     - lib/assets/icons/add.svg
     - lib/assets/icons/reels.svg
+    - lib/assets/icons/save.svg
+    - lib/assets/icons/save1.svg
+    - lib/assets/icons/comment.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
