@@ -14,6 +14,5 @@ const TextStyle kAppTitle = TextStyle(
 );
 
 const TextStyle kContentTextStyle = TextStyle(
-  fontFamily: 'OpenSans',
-  fontWeight: FontWeight.normal,
+  fontWeight: FontWeight.w600,
 );

@@ -20,14 +20,21 @@ class PostService {
       final response = await http.get(Uri.parse(apiUrl), headers: {
         'Authorization': 'Bearer $token',
       });
-
       if (response.statusCode == 200) {
         // Parse the JSON response
         final List<dynamic> jsonData = jsonDecode(response.body);
 
+        // Log the fetched JSON data
+
         // Convert the parsed JSON data into a list of Post objects
         final List<Post> posts = jsonData.map((data) {
-          return Post.fromJson(data as Map<String, dynamic>);
+          try {
+            // Log individual post data before parsing
+            return Post.fromJson(data as Map<String, dynamic>);
+          } catch (e) {
+            // Log the error and the specific post data that caused it
+            throw Exception('Failed to parse post: $e');
+          }
         }).toList();
 
         return posts;

@@ -38,7 +38,9 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+              child: Text('Error: ${snapshot.error}\n${snapshot.stackTrace}'),
+            );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No posts found.'));
           }
@@ -49,6 +51,8 @@ class _HomePageState extends State<HomePage> {
             itemCount: posts.length,
             itemBuilder: (context, index) {
               final post = posts[posts.length - index - 1];
+              print(
+                  'Rendering post: ${post.id}, ${post.caption}, ${post.image}, ${post.video}');
               return PostCard(post: post);
             },
           );
