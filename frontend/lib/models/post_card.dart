@@ -2,10 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/controller/feed_post_controller.dart';
+import 'package:frontend/utils/constants.dart';
 import 'package:frontend/controller/like_controller.dart';
 import 'package:provider/provider.dart';
-import '../services/like_service.dart';
-import '../utils/constants.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
@@ -18,33 +17,29 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard>
     with AutomaticKeepAliveClientMixin<PostCard> {
+  late LikeController _likeController;
   @override
   bool get wantKeepAlive => true;
+  @override
+  void initState() {
+    super.initState();
+    _likeController = LikeController();
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
+    print('Building PostCard for post: ${widget.post.id}');
+
     return ChangeNotifierProvider(
       create: (_) {
-        try {
-          return LikeController(
-            likeService: LikeService(),
-            isLiked: widget.post.isLiked,
-            likeCount: widget.post.liked.length,
-          );
-        } catch (e) {
-          print('Error creating LikeController: $e');
-          // Handle or log error if necessary
-          return LikeController(
-            likeService: LikeService(),
-            isLiked: false,
-            likeCount: 0,
-          );
-        }
+        print('Creating LikeController for post: ${widget.post.id}');
+        return LikeController();
       },
       child: Consumer<LikeController>(
-        builder: (context, controller, child) {
+        builder: (context, controller, _) {
+          print('Using LikeController in PostCard for post: ${widget.post.id}');
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
@@ -79,15 +74,24 @@ class _PostCardState extends State<PostCard>
                 const SizedBox(height: 5),
                 Row(
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        controller.isLiked
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: controller.isLiked ? Colors.red : Colors.grey,
-                        size: 30,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          if (controller == null) {
+                            print('Error: LikeController is null');
+                            return;
+                          }
+                          controller.toggleLike(widget.post.id);
+                        },
+                        child: Icon(
+                          controller.isLiked
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: controller.isLiked ? Colors.red : Colors.grey,
+                          size: 30,
+                        ),
                       ),
-                      onPressed: () => controller.toggleLike(widget.post.id),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -108,8 +112,8 @@ class _PostCardState extends State<PostCard>
                 Padding(
                   padding: const EdgeInsets.only(left: 8, top: 4),
                   child: Text(
-                    '${controller.likeCount} likes',
-                    style: kContentTextStyle,
+                    '${controller.postData?['liked'].length ?? widget.post.liked.length} likes',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 Padding(
