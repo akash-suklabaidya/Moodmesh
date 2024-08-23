@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -111,15 +112,28 @@ public class PostServiceImplementation implements PostService{
 
     @Override
     public Post likePost(String postId, String userId) throws Exception{
-        Post post=findPostById(postId);
-        User user=userService.findUserById(userId);
-        if(post.getLiked().contains(user)){
-            post.getLiked().remove(user);
+        Post post = findPostById(postId);
+
+        // Find the user by their ID
+        User user = userService.findUserById(userId);
+
+        if (post.getLiked() == null) {
+            post.setLiked(new ArrayList<>());
         }
-        else{
+
+        // Check if the user is already in the liked list
+        boolean isLiked = post.getLiked().stream()
+                .anyMatch(likedUser -> likedUser.getId().equals(user.getId()));
+
+        if (isLiked) {
+            // Remove the user from the liked list
+            post.getLiked().removeIf(likedUser -> likedUser.getId().equals(user.getId()));
+        } else {
+            // Add the user to the liked list
             post.getLiked().add(user);
         }
 
+        // Save the updated post to the repository
         return postRepository.save(post);
     }
 
