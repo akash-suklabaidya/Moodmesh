@@ -26,6 +26,7 @@ public class UserServiceImplementation implements UserService{
         newUser.setEmail(user.getEmail());
         newUser.setFirstName(user.getFirstName());
         newUser.setLastName(user.getLastName());
+        newUser.setUserName(user.getUserName().toLowerCase());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setId(user.getId());
         newUser.setGender(user.getGender());
@@ -33,6 +34,11 @@ public class UserServiceImplementation implements UserService{
         User savedUser = userRepository.save(newUser);
 
         return savedUser;
+    }
+
+    @Override
+    public boolean isUsernameAvailable(String userName) throws Exception {
+        return userRepository.existsByUserName(userName);
     }
 
     @Override

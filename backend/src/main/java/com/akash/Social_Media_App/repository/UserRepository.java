@@ -1,11 +1,9 @@
 package com.akash.Social_Media_App.repository;
 
 
-import com.akash.Social_Media_App.models.Post;
 import com.akash.Social_Media_App.models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -18,5 +16,8 @@ public interface UserRepository extends MongoRepository<User,String> {
     List<User> searchUser(String query);
 
     long countBySavedPostsContains(String postId);
+
+    boolean existsByUserName(String username);
+
 
 }

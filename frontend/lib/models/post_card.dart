@@ -18,28 +18,25 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard>
     with AutomaticKeepAliveClientMixin<PostCard> {
   late LikeController _likeController;
+
   @override
   bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
     _likeController = LikeController();
+    _likeController.setInitialLikeStatus(widget.post.liked.isNotEmpty);
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    print('Building PostCard for post: ${widget.post.id}');
-
     return ChangeNotifierProvider(
-      create: (_) {
-        print('Creating LikeController for post: ${widget.post.id}');
-        return LikeController();
-      },
+      create: (_) => _likeController,
       child: Consumer<LikeController>(
         builder: (context, controller, _) {
-          print('Using LikeController in PostCard for post: ${widget.post.id}');
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
@@ -54,7 +51,7 @@ class _PostCardState extends State<PostCard>
                     ),
                   ),
                   title: Text(
-                    '${widget.post.user.firstName} ${widget.post.user.lastName}',
+                    widget.post.user.userName,
                   ),
                 ),
                 const SizedBox(height: 5),
@@ -78,17 +75,13 @@ class _PostCardState extends State<PostCard>
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: GestureDetector(
                         onTap: () {
-                          if (controller == null) {
-                            print('Error: LikeController is null');
-                            return;
-                          }
                           controller.toggleLike(widget.post.id);
                         },
                         child: Icon(
                           controller.isLiked
                               ? Icons.favorite
                               : Icons.favorite_border,
-                          color: controller.isLiked ? Colors.red : Colors.grey,
+                          color: controller.isLiked ? Colors.red : Colors.black,
                           size: 30,
                         ),
                       ),

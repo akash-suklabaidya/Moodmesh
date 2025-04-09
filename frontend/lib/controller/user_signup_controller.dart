@@ -19,6 +19,7 @@ class LoginResult {
 class SignupController {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
+  // final TextEditingController userName = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
@@ -26,6 +27,7 @@ class SignupController {
   void dispose() {
     firstNameController.dispose();
     lastNameController.dispose();
+    // userName.dispose();
     emailController.dispose();
     passwordController.dispose();
     genderController.dispose();
@@ -78,6 +80,7 @@ class SignupController {
     final body = jsonEncode({
       'firstName': firstNameController.text,
       'lastName': lastNameController.text,
+      'userName': lastNameController.text,
       'email': emailController.text,
       'password': passwordController.text,
       'gender': genderController.text,
@@ -86,8 +89,8 @@ class SignupController {
     try {
       final response = await http.post(url, headers: headers, body: body);
 
+      final responseData = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
         final token = responseData['token'];
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -95,8 +98,7 @@ class SignupController {
         // return responseData['message'] ?? 'Signup successful';
         return LoginResult(response.statusCode, 'Signup successful');
       } else if (response.statusCode == 400) {
-        return LoginResult(
-            response.statusCode, 'Email already registered. Please try again');
+        return LoginResult(response.statusCode, responseData['message']);
       } else {
         // Handle error response
         final errorData = jsonDecode(response.body);

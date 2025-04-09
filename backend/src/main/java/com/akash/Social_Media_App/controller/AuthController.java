@@ -37,12 +37,17 @@ public class AuthController {
     @PostMapping("/signup")
     public AuthResponse createUser(@RequestBody User user)throws Exception {
 
+        if(userRepository.existsByUserName(user.getUserName())){
+            throw new Exception(("Username already taken"));
+        }
+
         if(userRepository.findByEmail(user.getEmail())!=null){
-            throw new Exception(("email already used with another account"));
+            throw new Exception(("Email already used with another account"));
         }
 
         User newUser = new User();
         newUser.setEmail(user.getEmail());
+        newUser.setUserName(user.getUserName().toLowerCase());
         newUser.setFirstName(user.getFirstName());
         newUser.setLastName(user.getLastName());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -69,6 +74,7 @@ public class AuthController {
         return res;
     }
 
+    
     private Authentication authenticate(String email, String password) {
         UserDetails userDetails=customerUserDetailService.loadUserByUsername(email);
         if(userDetails==null){

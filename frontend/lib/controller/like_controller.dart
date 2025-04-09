@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/services/like_service.dart';
 
-class LikeController extends ChangeNotifier {
-  final LikeService _likeService = LikeService();
-  bool isLiked = false;
-  Map<String, dynamic>? postData;
+class LikeController with ChangeNotifier {
+  bool _isLiked = false;
+  Map<String, dynamic>? _postData;
+
+  bool get isLiked => _isLiked;
+  Map<String, dynamic>? get postData => _postData;
+
+  void setInitialLikeStatus(bool isLiked) {
+    _isLiked = isLiked;
+    notifyListeners();
+  }
 
   Future<void> toggleLike(String postId) async {
-    print(postId);
     try {
-      postData = await _likeService.likePost(postId);
-      print(postData);
-      isLiked = postData!['liked'].length > 0;
-      notifyListeners();
+      final likeService = LikeService();
+      _postData = await likeService.likePost(postId);
+      _isLiked = !_isLiked; // Toggle the like status
+      notifyListeners(); // Notify listeners to rebuild the UI
     } catch (e) {
-      print('Error liking post: $e');
+      print("Error toggling like: $e");
     }
   }
 }

@@ -46,6 +46,7 @@ class User {
   final String id;
   final String firstName;
   final String lastName;
+  final String userName;
   final String email;
   final String gender;
 
@@ -53,6 +54,7 @@ class User {
     required this.id,
     required this.firstName,
     required this.lastName,
+    required this.userName,
     required this.email,
     required this.gender,
   });
@@ -64,6 +66,7 @@ class User {
       lastName: json['lastName'] as String,
       email: json['email'] as String,
       gender: json['gender'] as String,
+      userName: json['userName'] as String,
     );
   }
 }

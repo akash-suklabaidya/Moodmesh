@@ -9,6 +9,8 @@ public interface UserService {
 
     public User registerUser(User user);
 
+    public boolean isUsernameAvailable(String userName) throws Exception;
+
     public User findUserById(String String) throws UserException;
 
     public User findUserByEmail(String email);
